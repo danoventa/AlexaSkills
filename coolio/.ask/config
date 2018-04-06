@@ -1,0 +1,45 @@
+{
+  "deploy_settings": {
+    "default": {
+      "skill_id": "amzn1.ask.skill.e4140992-4543-49ab-8b85-8cc2c69aaefd",
+      "was_cloned": false,
+      "merge": {
+        "manifest": {
+          "apis": {
+            "custom": {
+              "endpoint": {
+                "uri": "ask-custom-coolio-default"
+              }
+            }
+          }
+        }
+      }
+    },
+    "dan": {
+      "skill_id": "amzn1.ask.skill.35271d04-7923-455b-82d9-3b82611680f8",
+      "was_cloned": false,
+      "merge": {
+        "manifest": {
+          "apis": {
+            "custom": {}
+          }
+        }
+      }
+    },
+    "ask-cli-user": {
+      "skill_id": "amzn1.ask.skill.7c942a4d-5484-4227-82b1-a55d8163b253",
+      "was_cloned": false,
+      "merge": {
+        "manifest": {
+          "apis": {
+            "custom": {
+              "endpoint": {
+                "uri": "ask-custom-coolio-ask-cli-user"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
