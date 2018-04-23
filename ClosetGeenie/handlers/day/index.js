@@ -1,1 +1,1 @@
-export {default as Handler} from './handler';
+export {default as dayHandler} from './handler';

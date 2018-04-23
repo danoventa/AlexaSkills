@@ -1,6 +1,8 @@
 # Intent Building with Slots
 
-## Pure Statements
+## Incoming requests for the Root State
+
+### Statements
 
 Statement 1:
 { root_request }
@@ -9,8 +11,6 @@ forecast
 Statement 2:
 { root_request }
 dressing
-
-## Statements
 
 {pronoun} {verb} {verb} {preposition} {determiner} {root_request}
 I am going to the store.
@@ -24,7 +24,7 @@ I'm gonna go to the store.
 {pronoun_verb_contraction} {verb} {preposition} {verb} {root_request}
 I'm going to go out.
 
-## Requests
+### Requests
 
 {pronoun} {verb} {determiner} {root_request} {preposition} {adverb}
 what is the weather like today
@@ -62,7 +62,7 @@ tell me what the weather is
 {verb} {pronoun} {determiner} {determiner} {root_request} {verb} {preposition}
 tell me what the weather is like
 
-## Demands
+### Demands
 
 {verb} {pronoun} {determiner} {noun}
 tell me the weather.

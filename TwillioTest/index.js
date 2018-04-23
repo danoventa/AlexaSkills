@@ -76,8 +76,8 @@ const handlers = {
                    2. Do the other Thing.
 
                    K, thanks! `,
-            to:'+12242510436',
-            from:'+18162031632'
+            to:'+',
+            from:'+'
         }).then((message) => console.log(message.sid));
 
         this.emit(':tell', "All done, message sent, welcome to the gravy train!");

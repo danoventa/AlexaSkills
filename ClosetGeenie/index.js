@@ -1,54 +1,39 @@
 'use strict';
 
 const Alexa = require('alexa-sdk');
+const appConstants = require('./constants/appConstants');
+const dayHandler = require('./handlers/day');
+const rootHandler = require('./handlers/root');
+const settingsHandler = require('./handlers/settings');
+const tripHandler = require('./handlers/trip');
 
+exports.handler = function(event, context, callback) {
+    let alexa = Alexa.handler(event, context);
+
+    alexa.appId = appConstants.appId;
+    alexa.registerHandlers(dayHandler, rootHandler, settingsHandler, tripHandler);
+    alexa.execute();
+};
+
+'use strict';
+
+const Alexa = require('alexa-sdk');
 
 const handlers = {
 
     'LaunchRequest': function() {
-
-        if(Object.keys(this.attributes).length === 0) {
-            this.attributes[numberCorrect] = 0;
-            this.attributes[currentFlashcardIndex] = 0;
-            this.response.speak("Welcome to Flashcards Let's get started. " +
-                this.emit('AskQuestion')).listen(this.emit('AskQuestion'));
-        } else {
-            this.response.speak("Welcome back to Flashcards. You're on question " + this.attributes[currentFlashcardIndex] +
-                " and have answered " + this.attributes[numberCorrect] + " correctly. " +
-                this.emit('AskQuestion')).listen(this.emit('AskQuestion'));
-        }
+        this.emit(':ask', "Just keeping the session open");
         this.emit(':responseReady');
     },
 
     // User gives an answer
-    'AnswerIntent': function() {
-        var userAnswer = this.event.request.intent.slot.capitals.value;
-        var currentFlashcardIndex = this.attributes[currentFlashcardIndex];
-        var response = "";
-
-        if(userAnswer.toLowerCase() === flashcardsDictionary[currentFlashcardIndex].capital.toLowerCase()){
-            this.attributes[numberCorrect]++;
-            response = "You're Correct!";
-        } else {
-            response = "Sorry, you're mistaken.";
-        }
-        this.attributes[currentFlashcardIndex]++;
-        this.response.speak(response + " Next question! " + this.emit('AskQuestion')).listen(this.emit('AskQuestion'));
-        this.emit(':responseReady');
+    'RootRequest': function() {
+        this.emit(":tell", "Congrats, you've success!");
     },
 
-    'AskQuestion' : function(){
-        var currIndex = this.attributes[currentFlashcardIndex];
-        var currentState = flashcardsDictionary[currIndex].name;
-
-        this.response.speak("What is the capital of " + currentState + "?");
-        this.emit('AnswerIntent');
-        this.emit(':responseReady');
-    },
     // Stop
     'AMAZON.StopIntent': function() {
-        this.response.speak('Ok, let\'s play again soon.');
-        this.emit(':responseReady');
+        this.emit(":tell", "OK, good bye")
     },
 
     // Cancel

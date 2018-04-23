@@ -21,101 +21,27 @@ const intents = {
 module.exports = Alexa.CreateStateHandler(
     constants.states.AWS,
     Object.assign({}, genericHandlers, {
-
-        'GiveAWSDetails' : function () {
-            const offeringSlot = alexaHelper.ResolveSlotValue('offerings', this.event).toLowerCase();
-            if (offeringSlot in awsDetails){
-                this.attributes[LASTREQUEST] = offeringSlot;
-                this.attributes[INTNET] = intents.GiveAWSDetails;
-
-                const offering =`${awsShort[offeringSlot]}`;
-                this.emit(
-                    ':ask',
-                    `${offering} ${prompts.prompt.GiveAWSDetailsSuccess}`,
-                    prompts.reprompt.GiveAWSDetailsSuccess);
-            } else {
-                this.emit(
-                    ':ask',
-                    prompts.prompt.GiveAWSDetailsFail,
-                    `${prompts.reprompt.GiveAWSDetailsFail} ${OFFERINGSSPEECH}`);
-            }
+        'LaunchRequest': function() {
+            this.emit(':ask', "Just keeping the session open");
+            this.emit(':responseReady');
         },
 
-        'ExpandAWSDetails' : function (){
-            const offeringSlot = this.attributes[LASTREQUEST];
-            this.attributes[INTNET] = intents.GiveAWSDetails;
-
-            const offering =`${awsDetails[offeringSlot]}`;
-            this.emit(
-                ':ask',
-                `${offering} ${prompts.prompt.ExpandAWSDetails}`,
-                prompts.reprompt.ExpandAWSDetails);
+        'RootRequest': function() {
+            this.emit(":tell", "Congrats, you've success!");
         },
 
-        // State entered upon switching to this state.
-        'EnterState': function () {
-            const awsOfferings =    prompts.prompt.EnterStateOffering(OFFERINGSSPEECH);
-
-            this.emit(
-                ':ask',
-                `${awsOfferings} ${prompts.prompt.EnterState}`,
-                prompts.reprompt.EnterState);
+        'AMAZON.StopIntent': function() {
+            this.emit(":tell", "OK, good bye")
         },
 
-        'CatchState': function() {
-            this.attributes[INTENT] = intents.CatchState;
-            this.emit(':ask', prompts.prompt.CatchState, prompts.reprompt.CatchState)
+        'AMAZON.CancelIntent': function() {
+            this.response.speak('Ok, let\'s play again soon.');
+            this.emit(':responseReady');
         },
 
-        'AMAZON.HelpIntent': function(){
-            this.emit(
-                ':ask',
-                prompts.prompt.HelpIntent,
-                `${prompts.reprompt.HelpIntent} ${OFFERINGEXAMPLES}`);
-        },
-
-        'AMAZON.YesIntent': function(){
-            switch(this.attributes[INTNET]){
-                case intents.EnterState:
-                    this.emitWithState('AMAZON.HelpIntent');
-                    break;
-                case intents.GiveAWSDetails:
-                    this.emitWithState('ExpandAWSDetails');
-                    break;
-                case intents.ExpandAWSDetails:
-                    this.emitWithState('ExpandAWSDetails');
-                    break;
-                case intents.HelpIntent:
-                    this.emitWithState('AMAZON.HelpIntent');
-                    break;
-                case intents.CatchState:
-                    this.emit('AMAZON.StopIntent');
-                    break;
-                default:
-                    this.emit('Unhandled');
-            }
-        },
-
-        'AMAZON.NoIntent': function(){
-            switch(this.attributes[INTNET]){
-                case intents.EnterState:
-                    this.emitWithState('AMAZON.HelpIntent');
-                    break;
-                case intents.GiveAWSDetails:
-                    this.emitWithState('AMAZON.HelpIntent');
-                    break;
-                case intents.ExpandAWSDetails:
-                    this.emitWithState('EnterState');
-                    break;
-                case intents.HelpIntent:
-                    this.emitWithState('CatchState');
-                    break;
-                case intents.CatchState:
-                    this.emit('AMAZON.HelpIntent');
-                    break;
-                default:
-                    this.emit('Unhandled');
-            }
+        'SessionEndedRequest': function() {
+            console.log('session ended!');
+            this.emit(':saveState', true);
         }
     })
 );
